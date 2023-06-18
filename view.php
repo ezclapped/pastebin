@@ -2,7 +2,6 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-
 require 'config.php';
 
 // Create connection
@@ -15,32 +14,23 @@ if ($conn->connect_error) {
 
 // Retrieve the paste content and syntax based on the ID from the URL
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $stmt = $conn->prepare("SELECT content, syntax FROM pastes WHERE id = ?");
-    $stmt->bind_param("i", $id);
+    $stmt = $conn->prepare("SELECT content, syntax, pastename FROM pastes WHERE id = ?");
+    $stmt->bind_param("s", $_GET['id']);
     $stmt->execute();
-    $stmt->bind_result($content, $syntax);
-
-    if ($stmt->fetch()) {
-        $stmt->close();
-        $conn->close();
-    } else {
-        echo "Paste not found.";
-        $stmt->close();
-        $conn->close();
-        exit;
-    }
-} else {
-    echo "Invalid request.";
-    $conn->close();
-    exit;
+    $stmt->bind_result($content, $syntax, $pastename);
+    $stmt->fetch();
+    $stmt->close();
 }
+
+// Close database connection
+$conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title><?= SITE_NAME; ?> - View Paste</title>
+    <title><?= SITE_NAME; ?> - <?= $pastename; ?></title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/atom-one-dark.min.css">
     <style>
@@ -319,7 +309,7 @@ footer p {
 <body>
 <div class="container">
             <center>
-                <h1 class="page-title">Create New Paste</h1>
+                <h1 class="page-title"><?= $pastename; ?></h1>
                 <p class="page-overview">Store large code & text online and share with the world.</p>
             </center>
             <div class="paste-wrap">
