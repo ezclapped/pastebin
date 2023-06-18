@@ -7,6 +7,7 @@ require 'config.php';
 <head>
     <title><?= SITE_NAME; ?> - Create Paste</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/styles/atom-one-dark.min.css">
     <style>
 * {
     margin: 0;
@@ -284,11 +285,11 @@ footer p {
                 <h1 class="page-title">Create New Paste</h1>
                 <p class="page-overview">Store large code & text online and share with the world.</p>
             </center>
-
             <form class="paste-wrap" method="post" action="save.php">
                 <div class="paste-head">
+                    <input type="text" name="name" placeholder="Untitled Paste" autocomplete="off" required>
                     <select name="syntax">
-                        <option value="">Text</option>
+                        <option value="text">Text</option>
                         <option value="bash">Bash</option>
                         <option value="brainfuck">Brainfuck</option>
                         <option value="c">C</option>
@@ -320,6 +321,11 @@ footer p {
                 <textarea name="content" placeholder="Create a new paste..."></textarea>
             </form>
         </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.4.0/highlight.min.js"></script>
+    <script>
+        hljs.highlightAll();
 
+    
+    </script>
     </body>
 </html>
