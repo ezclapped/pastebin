@@ -11,21 +11,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Generate random ID with a random length between 1 and 24
-    $randomLength = rand(1, 24);
+    $randomLength = rand(6, 24);
     $randomId = generateRandomId($randomLength);
 
     // Prepare and execute the INSERT statement
-    $stmt = $conn->prepare("INSERT INTO pastes (id, content, syntax) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $randomId, $_POST['content'], $_POST['syntax']);
+    $stmt = $conn->prepare("INSERT INTO pastes (id, content, syntax, pastename) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("ssss", $randomId, $_POST['content'], $_POST['syntax'], $_POST['name']);
     $stmt->execute();
 
-    // Close statement and database connection
+    // Close the connection
     $stmt->close();
     $conn->close();
 
-    $redirectUrl = "view?id=" . $randomId;
-    header("Location: " . $redirectUrl);
-    exit;
+    // Redirect to the paste
+    header("Location: view.php?id=" . $randomId);
+    die();
 }
 
 // Function to generate random ID
